@@ -13,5 +13,10 @@
             "name": "Tomasz Szymczyk",
             "email": "tomasz.szymczyk@karion.net.pl"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Karion\\Chickencoop\\": "src/"
+        }
+    }
 }
