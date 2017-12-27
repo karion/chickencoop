@@ -1,0 +1,17 @@
+{
+    "name": "karion/chickencoop",
+    "description": "MonteCarlo analyse of \\\"Full chicken coop\\\" game",
+    "type": "project",
+    "require": {
+        "symfony/console": "^4.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.0"
+    },
+    "authors": [
+        {
+            "name": "Tomasz Szymczyk",
+            "email": "tomasz.szymczyk@karion.net.pl"
+        }
+    ]
+}
