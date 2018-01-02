@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: karion
- * Date: 27.12.17
- * Time: 12:11
- */
 
 namespace Karion\Chickencoop\Command;
 
