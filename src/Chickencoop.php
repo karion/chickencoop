@@ -147,4 +147,29 @@ class Chickencoop
         $this->eggs = 0;
         return $missing;
     }
+
+    /**
+     * Add one hen to chickencoop
+     *
+     */
+    public function addHen()
+    {
+        $this->hens++;
+    }
+
+    /**
+     * Add one chicken to chickencoop
+     */
+    public function addChicken()
+    {
+        $this->chickens++;
+    }
+
+    /**
+     * Add one egg to chickencoop
+     */
+    public function addEgg()
+    {
+        $this->eggs++;
+    }
 }
