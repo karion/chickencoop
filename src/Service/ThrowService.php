@@ -18,7 +18,11 @@ class ThrowService
         $this->diceService = $diceService;
     }
 
-    public function makeThrow(Chickencoop $chickencoop)
+    /**
+     * @param Chickencoop $chickencoop
+     * @return bool is throw was double
+     */
+    public function makeThrow(Chickencoop $chickencoop) : bool
     {
         $throws = [
             0 => $this->diceService->k6(),
