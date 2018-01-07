@@ -27,7 +27,7 @@ class Game
     {
         foreach ($strategies as $strategy) {
             if (!$strategy instanceof \Karion\Chickencoop\Strategy\StrategyInterface) {
-                throw new Exception("Can't register this as strategy");
+                throw new \Exception("Can't register this as strategy");
             }
 
             $this->strategies[$strategy->getName()] = $strategy;
@@ -38,7 +38,7 @@ class Game
     public function play(\Karion\Chickencoop\Chickencoop $chickencoop, $strategyName)
     {
         if (!array_key_exists($strategyName, $this->strategies)) {
-            throw new Exception('Unknown strategy.');
+            throw new \Exception('Unknown strategy.');
         }
 
         $this->strategy = $this->strategies[$strategyName];
