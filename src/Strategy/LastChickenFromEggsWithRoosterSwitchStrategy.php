@@ -4,11 +4,15 @@ namespace Karion\Chickencoop\Strategy;
 
 
 use Karion\Chickencoop\Chickencoop;
+use Karion\Chickencoop\Strategy\Traits\HenTrait;
+use Karion\Chickencoop\Strategy\Traits\LastChickenTrait;
 use Karion\Chickencoop\Strategy\Traits\RoosterTrait;
 
-class NoSwitchExceptRoosterStrategy implements StrategyInterface
+class LastChickenFromEggsWithRoosterSwitchStrategy implements StrategyInterface
 {
     use RoosterTrait;
+    use HenTrait;
+    use LastChickenTrait;
 
     /**
      * @param Chickencoop $chickencoop
@@ -17,6 +21,14 @@ class NoSwitchExceptRoosterStrategy implements StrategyInterface
     public function makeSwitch(Chickencoop $chickencoop): bool
     {
         if ($this->trySwitchToRooster($chickencoop)) {
+            return true;
+        }
+
+        if ($this->trySwitchToHen($chickencoop)) {
+            return true;
+        }
+
+        if ($this->trySwitchToLastChicken($chickencoop)) {
             return true;
         }
 
@@ -29,6 +41,6 @@ class NoSwitchExceptRoosterStrategy implements StrategyInterface
      */
     public function getName(): string
     {
-        return "no_switch_except_rooster";
+        return "last_chicken_with_rooster";
     }
 }
