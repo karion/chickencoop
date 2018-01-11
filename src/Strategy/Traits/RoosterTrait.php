@@ -4,7 +4,7 @@ namespace Karion\Chickencoop\Strategy\Traits;
 
 trait RoosterTrait
 {
-    protected function trySwitchRooster(\Karion\Chickencoop\Chickencoop $chickencoop)
+    protected function trySwitchToRooster(\Karion\Chickencoop\Chickencoop $chickencoop)
     {
 
         if ($chickencoop->hasRooster()) {
