@@ -6,6 +6,10 @@ use Karion\Chickencoop\Chickencoop;
 use Karion\Chickencoop\Game;
 use Karion\Chickencoop\Service\DiceService;
 use Karion\Chickencoop\Service\ThrowService;
+use Karion\Chickencoop\Strategy\HenAndRoosterSwitchStrategy;
+use Karion\Chickencoop\Strategy\HenOnlySwitchStrategy;
+use Karion\Chickencoop\Strategy\LastChickenFromEggsSwitchStrategy;
+use Karion\Chickencoop\Strategy\LastChickenFromEggsWithRoosterSwitchStrategy;
 use Karion\Chickencoop\Strategy\NoSwitchExceptRoosterStrategy;
 use Karion\Chickencoop\Strategy\NoSwitchStrategy;
 use Symfony\Component\Console\Command\Command;
@@ -48,7 +52,11 @@ class MonteCarlo extends Command
             new ThrowService(new DiceService()),
             [
                 new NoSwitchStrategy(),
-                new NoSwitchExceptRoosterStrategy()
+                new NoSwitchExceptRoosterStrategy(),
+                new LastChickenFromEggsSwitchStrategy(),
+                new LastChickenFromEggsWithRoosterSwitchStrategy(),
+                new HenOnlySwitchStrategy(),
+                new HenAndRoosterSwitchStrategy()
             ]
         );
 
