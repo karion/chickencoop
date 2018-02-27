@@ -3,12 +3,13 @@
 namespace Karion\Chickencoop\Strategy;
 
 use Karion\Chickencoop\Chickencoop;
+use Karion\Chickencoop\Game;
 
 class NoSwitchStrategy implements StrategyInterface
 {
     /**
      * @param Chickencoop $chickencoop
-     * @return bool is switch was done on chickencoop
+     * @param Game $game
      */
     public function playRound(Chickencoop $chickencoop, Game $game)
     {

@@ -16,7 +16,7 @@ class LastChickenFromEggsWithRoosterSwitchStrategy implements StrategyInterface
     {
         if (!$chickencoop->hasRooster()) {
             if ($chickencoop->countHens() >= 3) {
-                $game->switchToRooster();
+                $game->switchToRooster($chickencoop);
                 return;
             }
         }

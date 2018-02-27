@@ -11,9 +11,9 @@ class LastChickenFromEggsSwitchStrategy implements StrategyInterface
 
     /**
      * @param Chickencoop $chickencoop
-     * @return bool is switch was done on chickencoop
+     * @param Game $game
      */
-    public function playRound(Chickencoop $chickencoop, Game $game): bool
+    public function playRound(Chickencoop $chickencoop, Game $game)
     {
         if ($chickencoop->countChickens() >= 3) {
             $game->switchToHen($chickencoop);
