@@ -4,29 +4,28 @@ namespace Karion\Chickencoop\Strategy;
 
 
 use Karion\Chickencoop\Chickencoop;
-use Karion\Chickencoop\Strategy\Traits\HenTrait;
-use Karion\Chickencoop\Strategy\Traits\LastChickenTrait;
+use Karion\Chickencoop\Game;
 
 class LastChickenFromEggsSwitchStrategy implements StrategyInterface
 {
-    use HenTrait;
-    use LastChickenTrait;
 
     /**
      * @param Chickencoop $chickencoop
      * @return bool is switch was done on chickencoop
      */
-    public function makeSwitch(Chickencoop $chickencoop): bool
+    public function playRound(Chickencoop $chickencoop, Game $game): bool
     {
-        if ($this->trySwitchToHen($chickencoop)) {
-            return true;
+        if ($chickencoop->countChickens() >= 3) {
+            $game->switchToHen($chickencoop);
+            return;
         }
 
-        if ($this->trySwitchToLastChicken($chickencoop)){
-            return true;
+        if ($chickencoop->countChickens() == 2 && $chickencoop->countEggs() >= 3) {
+            $game->switchToChicken($chickencoop);
+            return;
         }
 
-        return false;
+        $game->doThrow($chickencoop);
     }
 
     /**

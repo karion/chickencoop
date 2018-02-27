@@ -4,23 +4,22 @@ namespace Karion\Chickencoop\Strategy;
 
 
 use Karion\Chickencoop\Chickencoop;
-use Karion\Chickencoop\Strategy\Traits\HenTrait;
+use Karion\Chickencoop\Game;
 
 class HenOnlySwitchStrategy implements StrategyInterface
 {
-    use HenTrait;
-
     /**
      * @param Chickencoop $chickencoop
      * @return bool is switch was done on chickencoop
      */
-    public function makeSwitch(Chickencoop $chickencoop): bool
+    public function playRound(Chickencoop $chickencoop, Game $game): bool
     {
-        if ($this->trySwitchToHen($chickencoop)) {
-            return true;
+        if($chickencoop->countChickens() >= 3) {
+            $game->switchToHen($chickencoop);
+            return;
         }
 
-        return false;
+        $game->doThrow($chickencoop);
     }
 
     /**

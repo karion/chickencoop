@@ -2,25 +2,24 @@
 
 namespace Karion\Chickencoop\Strategy;
 
-
 use Karion\Chickencoop\Chickencoop;
-use Karion\Chickencoop\Strategy\Traits\RoosterTrait;
+use Karion\Chickencoop\Game;
 
 class NoSwitchExceptRoosterStrategy implements StrategyInterface
 {
-    use RoosterTrait;
-
     /**
      * @param Chickencoop $chickencoop
-     * @return bool is switch was done on chickencoop
+     * @param Game $game
      */
-    public function makeSwitch(Chickencoop $chickencoop): bool
+    public function playRound(Chickencoop $chickencoop, Game $game)
     {
-        if ($this->trySwitchToRooster($chickencoop)) {
-            return true;
+        if (!$chickencoop->hasRooster()) {
+            if ($chickencoop->countHens() >= 3) {
+                $game->switchToRooster();
+                return;
+            }
         }
-
-        return false;
+        $game->doThrow($chickencoop);
     }
 
     /**

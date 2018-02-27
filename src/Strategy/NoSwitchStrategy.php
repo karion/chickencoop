@@ -10,9 +10,9 @@ class NoSwitchStrategy implements StrategyInterface
      * @param Chickencoop $chickencoop
      * @return bool is switch was done on chickencoop
      */
-    public function makeSwitch(Chickencoop $chickencoop): bool
+    public function playRound(Chickencoop $chickencoop, Game $game)
     {
-        return false;
+        $game->doThrow($chickencoop);
     }
 
     /**
