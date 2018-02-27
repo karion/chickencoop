@@ -1,4 +1,5 @@
 <?php
+
 namespace Karion\Chickencoop;
 
 class Game
@@ -16,6 +17,10 @@ class Game
     private $turns = 0;
 
     private $doublesCount = 0;
+
+    private $henSwitchs = 0;
+
+    private $chickenSwitch = 0;
 
     /**
      * @var \Karion\Chickencoop\Service\ThrowService
@@ -35,7 +40,7 @@ class Game
         $this->throwService = $throwService;
     }
 
-    public function play(\Karion\Chickencoop\Chickencoop $chickencoop, $strategyName)
+    public function play(Chickencoop $chickencoop, $strategyName)
     {
         if (!array_key_exists($strategyName, $this->strategies)) {
             throw new \Exception('Unknown strategy.');
@@ -46,14 +51,10 @@ class Game
         $this->setupGame();
 
         do {
-
-            if (! $this->strategy->makeSwitch($chickencoop)) {
-                $this->doThrow($chickencoop);
-            }
+            $this->strategy->playRound($chickencoop, $this);
 
             $this->turns++;
         } while (!$chickencoop->isChickencoopFull());
-
 
         return $this->gameStats($chickencoop, $strategyName);
     }
@@ -65,9 +66,11 @@ class Game
     {
         $this->turns = 0;
         $this->doublesCount = 0;
+        $this->henSwitchs = 0;
+        $this->chickenSwitch = 0;
     }
 
-    private function gameStats(\Karion\Chickencoop\Chickencoop $chickencoop, $strategyName)
+    private function gameStats(Chickencoop $chickencoop, $strategyName)
     {
         $stats = [
             $strategyName,
@@ -76,16 +79,40 @@ class Game
             $chickencoop->countHens() ,
             $chickencoop->countChickens(),
             $chickencoop->countEggs(),
-            $this->doublesCount
+            $this->doublesCount,
+            $this->chickenSwitch,
+            $this->henSwitchs
         ];
 
         return implode(', ', $stats);
     }
 
-    private function doThrow(\Karion\Chickencoop\Chickencoop $chickencoop)
+    public function doThrow(Chickencoop $chickencoop)
     {
         if ($this->throwService->makeThrow($chickencoop)) {
             $this->doublesCount++;
         }
+    }
+
+    public function getStategies()
+    {
+        return $this->strategies;
+    }
+
+    public function switchToRooster(Chickencoop $chickencoop)
+    {
+        $chickencoop->switchToRooster();
+    }
+
+    public function switchToHen(Chickencoop $chickencoop)
+    {
+        $chickencoop->switchToHen();
+        $this->henSwitchs++;
+    }
+
+    public function switchToChicken(Chickencoop $chickencoop)
+    {
+        $chickencoop->switchToChicken();
+        $this->chickenSwitch++;
     }
 }
