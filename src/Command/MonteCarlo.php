@@ -13,14 +13,18 @@ use Karion\Chickencoop\Strategy\LastChickenFromEggsWithRoosterSwitchStrategy;
 use Karion\Chickencoop\Strategy\NoSwitchExceptRoosterStrategy;
 use Karion\Chickencoop\Strategy\NoSwitchStrategy;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class MonteCarlo extends Command
 {
+    private $strategies;
+
     protected function configure()
     {
         $this
@@ -29,7 +33,7 @@ class MonteCarlo extends Command
                 new InputDefinition(array(
                     new InputArgument(
                         'strategy',
-                        InputArgument::REQUIRED
+                        InputArgument::OPTIONAL
                     ),
                     new InputArgument(
                         'games',
@@ -44,21 +48,25 @@ class MonteCarlo extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gameStrategy = $input->getArgument('strategy');
+        $this->strategies = [
+            new NoSwitchStrategy(),
+            new NoSwitchExceptRoosterStrategy(),
+            new LastChickenFromEggsSwitchStrategy(),
+            new LastChickenFromEggsWithRoosterSwitchStrategy(),
+            new HenOnlySwitchStrategy(),
+            new HenAndRoosterSwitchStrategy()
+        ];
+        
+        
         $gamesLimit = (int) $input->getArgument('games');
         $gamesCount = 0;
 
         $gameEngine = new Game(
             new ThrowService(new DiceService()),
-            [
-                new NoSwitchStrategy(),
-                new NoSwitchExceptRoosterStrategy(),
-                new LastChickenFromEggsSwitchStrategy(),
-                new LastChickenFromEggsWithRoosterSwitchStrategy(),
-                new HenOnlySwitchStrategy(),
-                new HenAndRoosterSwitchStrategy()
-            ]
+            $this->strategies
         );
+        
+        $gameStrategy = $this->findGameStrategy($input, $output);
 
         while ($gamesCount <= $gamesLimit) {
             $chickencoop = new Chickencoop();
@@ -70,6 +78,25 @@ class MonteCarlo extends Command
             $gamesCount++;
             unset($chickencoop);
         }
+    }
+
+    private function findGameStrategy(InputInterface $input, OutputInterface $output)
+    {
+        $strategy = $input->getArgument('strategy');
+
+        if ($strategy === null) {
+            /** @var QuestionHelper $questionHelper */
+            $questionHelper = $this->getHelper('question');
+
+            $question = new ChoiceQuestion(
+                'Please select strategy: ',
+                array_map(function($s){return $s->getName();},$this->strategies)
+            );
+
+            $strategy = $questionHelper->ask($input, $output, $question);
+        }
+
+        return $strategy;
     }
 
 }
